@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, computed, effect, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, effect, ViewChild, ElementRef, inject, Inject } from '@angular/core';
 import { gsap } from "gsap";
 import { PhaseTrackerService } from './services/phase-tracker.service';
 import { BreathBorderComponent } from './breath-border.component/breath-border.component';
@@ -8,7 +8,11 @@ import { BreathCircleComponent } from './breath-circle.component/breath-circle.c
   selector: 'app-breathing',
   templateUrl: './breathing.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [BreathBorderComponent, BreathCircleComponent]
+  imports: [BreathBorderComponent, BreathCircleComponent],
+  providers: [{
+    provide: 'BreathTimeline',
+    useFactory: () => gsap.timeline({ repeat: -1, paused: true })
+  }]
 })
 export class BreathingComponent {
   @ViewChild(BreathCircleComponent) private readonly circleComp!: BreathCircleComponent;
@@ -17,7 +21,9 @@ export class BreathingComponent {
   // @ViewChild("paragraph") private readonly paragraph!: ElementRef<SVGPathElement>
 
   protected phaseTracker = inject(PhaseTrackerService);
-  private animationTimeline = gsap.timeline({ repeat: -1, paused: true });
+  
+  // private readonly animationTimeline: gsap.core.Timeline = gsap.timeline({ repeat: -1, paused: true });
+  constructor(@Inject('BreathTimeline') private readonly animationTimeline: gsap.core.Timeline) {}
 
   toggle() {
     if (this.phaseTracker.isRunning()) { this.stop() }
@@ -33,7 +39,6 @@ export class BreathingComponent {
     this.animationTimeline.pause();
   }
   ngAfterViewInit() {
-
     this.animationTimeline
       .add(this.circleComp.inhaleAnimation())
       .add(this.borderComp.holdAnimation())
