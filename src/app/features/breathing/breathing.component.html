@@ -1,0 +1,22 @@
+<div class="flex flex-col items-center justify-center">
+  <div class="grid grid-rows-3 items-center relative w-80 aspect-square rounded-xl bg-base-100 text-center text-primary-content overflow-hidden shadow-2xl z-20">
+    
+    <!-- Animations -->
+    <app-breath-circle />
+    <app-breath-border />
+
+    <!-- Phase text -->
+    <p #paragraph class="row-start-2 text-2xl font-semibold" aria-live="polite">
+      <span class="capitalize">{{ phaseTracker.phaseName() }}</span>
+    </p>
+
+    <!-- Controls -->
+    <div 
+      class="row-start-3 mb-10 swap justify-self-center" 
+      [class.swap-active]="phaseTracker.isRunning()" 
+      (click)="toggle()">
+      <button class="swap-off btn">Start</button>
+      <button class="swap-on btn btn-secondary">Stop</button>
+    </div>
+  </div>
+</div>
