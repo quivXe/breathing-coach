@@ -42,9 +42,6 @@ import { SessionService } from '../services/session.service';
     </label>
 
   </div>
-  <div class="text-2xl font-bold">{{store.getPhase('INHALE').duration}} {{store.getPhase('HOLD').duration}} {{store.getPhase('EXHALE').duration}}
-    <br>{{store.getPhase('INHALE').delay}} {{store.getPhase('HOLD').delay}} {{store.getPhase('EXHALE').delay}}
-  </div>
   `,
   styles: `
   .no-transition > ::before {

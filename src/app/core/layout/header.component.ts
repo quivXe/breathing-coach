@@ -7,7 +7,7 @@ import { LucideAngularModule, SlidersHorizontal } from 'lucide-angular';
   template: `
     <header class="navbar">
       <h1 class="grow text-3xl font-bold">Breathing Coach</h1>
-      <button (click)="settingsOpened.emit()">
+      <button (click)="settingsOpened.emit()" class="cursor-pointer">
         <lucide-angular [name]="SlidersIcon" />
       </button>
   </header>

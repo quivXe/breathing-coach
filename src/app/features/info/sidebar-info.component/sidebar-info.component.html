@@ -1,0 +1,70 @@
+<div class="relative">
+
+  <!-- Toggle Button: only visible on xl and above -->
+  <button
+    (click)="isOpen.set(!isOpen())"
+    class="btn btn-primary fixed top-4 right-4 z-50 hidden xl:block"
+  >
+    Info
+  </button>
+
+  <!-- Info Panel -->
+    <div
+    class="bg-base-200 shadow-2xl shadow-base-300 rounded-xl p-6 overflow-y-auto
+            mt-6 block xl:fixed xl:top-12 xl:right-0 xl:w-110 xl:h-[80%] xl:transition-transform xl:duration-300 xl:ease-in-out
+            translate-x-0  max-xl:translate-x-0"
+    [class.translate-x-full]="!isOpen()"
+    >
+    <h2 class="text-2xl font-bold mb-2">Breathing Coach</h2>
+    <p class="mb-4">
+      Controlled breathing can reduce stress, improve focus, and relax your mind and body.
+    </p>
+
+    <h3 class="text-xl font-semibold mb-2">How It Works</h3>
+    <ul class="list-disc list-inside mb-4">
+      <li><strong>Inhale:</strong> Breathe in slowly through your nose</li>
+      <li><strong>Hold:</strong> Pause and let oxygen circulate</li>
+      <li><strong>Exhale:</strong> Release gently through your mouth</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mb-2">Popular Patterns</h3>
+    <table class="table w-full mb-4">
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th>Inhale</th>
+          <th>Hold</th>
+          <th>Exhale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Focus</td>
+          <td>4s</td>
+          <td>4s</td>
+          <td>8s</td>
+        </tr>
+        <tr>
+          <td>Relaxation & Sleep Aid</td>
+          <td>4s</td>
+          <td>7s</td>
+          <td>8s</td>
+        </tr>
+        <tr>
+          <td>Stress Relief</td>
+          <td>4s</td>
+          <td>4s</td>
+          <td>4s</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="text-xl font-semibold mb-2">Tips</h3>
+    <ul class="list-disc list-inside mb-4">
+      <li>Listen to your body — don’t overstrain</li>
+      <li>Adjust the durations to your comfort level</li>
+      <li>Consistency is more important than exact timing</li>
+      <li>Practice daily for maximum benefit</li>
+    </ul>
+  </div>
+</div>
