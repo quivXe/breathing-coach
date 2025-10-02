@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { gsap } from "gsap";
 import { PhaseTrackerService } from '../services/phase-tracker.service';
-import { BreathConfigService } from '../services/breath-config.service';
+import { BreathConfigStore } from '../services/breath-config.service';
 
 @Component({
   selector: 'app-breath-circle',
@@ -10,7 +10,7 @@ import { BreathConfigService } from '../services/breath-config.service';
 export class BreathCircleComponent {
   @ViewChild("circle") private readonly circleEl!: ElementRef<HTMLElement>
   private readonly phaseTracker = inject(PhaseTrackerService);
-  private readonly breathConfig = inject(BreathConfigService);
+  private readonly breathConfigStore = inject(BreathConfigStore);
 
   private readonly insetFrom = "2rem";
   private readonly insetTo = "0.9rem";
@@ -18,7 +18,7 @@ export class BreathCircleComponent {
   private readonly radiusTo = "2%";
 
   inhaleAnimation(): gsap.core.Tween {
-    const { duration, delay } = this.breathConfig.getPhase('INHALE');
+    const { duration, delay } = this.breathConfigStore.getPhase('INHALE');
     return gsap.fromTo(
       this.circleEl.nativeElement, { borderRadius: this.radiusFrom, inset: this.insetFrom }, {
       inset: this.insetTo,
@@ -30,7 +30,7 @@ export class BreathCircleComponent {
     })
   }
   exhaleAnimation(): gsap.core.Tween {
-    const { duration, delay } = this.breathConfig.getPhase('EXHALE');
+    const { duration, delay } = this.breathConfigStore.getPhase('EXHALE');
     return gsap.to(
       this.circleEl.nativeElement, { 
       borderRadius: this.radiusFrom,

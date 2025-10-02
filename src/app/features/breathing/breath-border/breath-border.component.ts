@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { PhaseTrackerService } from '../services/phase-tracker.service';
 import gsap from 'gsap';
-import { BreathConfigService } from '../services/breath-config.service';
+import { BreathConfigStore } from '../services/breath-config.service';
 
 @Component({
   selector: 'app-breath-border',
@@ -32,10 +32,10 @@ import { BreathConfigService } from '../services/breath-config.service';
 export class BreathBorderComponent {
   @ViewChild("path") private readonly pathEl!: ElementRef<SVGElement>
   private readonly phaseTracker = inject(PhaseTrackerService);
-  private readonly breathConfig = inject(BreathConfigService);
+  private readonly breathConfigStore = inject(BreathConfigStore);
 
   holdAnimation(): gsap.core.Tween {
-    const { duration, delay } = this.breathConfig.getPhase('HOLD');
+    const { duration, delay } = this.breathConfigStore.getPhase('HOLD');
     return gsap.fromTo(
       this.pathEl.nativeElement, { drawSVG: '0' }, {
       drawSVG: '100%', 

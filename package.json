@@ -28,6 +28,7 @@
     "@angular/forms": "^20.3.0",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
+    "@ngrx/signals": "^20.0.1",
     "@tailwindcss/postcss": "^4.1.13",
     "daisyui": "^5.1.25",
     "gsap": "^3.13.0",
@@ -42,8 +43,7 @@
     "@angular/cli": "^20.3.3",
     "@angular/compiler-cli": "^20.3.0",
     "@testing-library/angular": "^18.1.0",
-    "@types/jasmine": "~5.1.0",
-    "jasmine-core": "~5.9.0",
+    "@testing-library/jest-dom": "^6.9.1",
     "jsdom": "^27.0.0",
     "typescript": "~5.9.2",
     "vitest": "^3.2.4"

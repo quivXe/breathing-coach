@@ -1,17 +1,18 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { BreathConfigService, Phase, PhaseName } from './breath-config.service';
+import { BreathConfigStore, PhaseConfig, PhaseName } from './breath-config.service';
+import { SessionService } from './session.service';
 
 @Injectable({ providedIn: 'root' })
 export class PhaseTrackerService {
-  private readonly breathConfig = inject(BreathConfigService);
+  private readonly breathConfigStore = inject(BreathConfigStore);
+  private readonly sessionService = inject(SessionService);
   private iterator = this.phaseGenerator();
 
-  readonly phase = signal<Phase | null>(null);
-  readonly phaseName = computed<PhaseName>(() => this.phase() ? this.phase()!.name : 'RELAX');
-  readonly isRunning = computed<Boolean>(() => this.phase() !== null);
+  readonly phase = signal<PhaseConfig | null>(null);
+  readonly phaseName = computed<PhaseName | 'RELAX'>(() => this.phase() ? this.phase()!.name : 'RELAX');
 
-  private *phaseGenerator(): Generator<Phase> {
-    while (true) for (let phase of this.breathConfig.config().phases) yield phase;
+  private *phaseGenerator(): Generator<PhaseConfig> {
+    while (true) for (let phase of this.breathConfigStore.phases()) yield phase;
   }
 
   nextPhase() {

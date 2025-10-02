@@ -1,13 +1,15 @@
-import { Injectable, signal } from '@angular/core';
+import { computed } from '@angular/core';
+import { signalStore, withState, withComputed, withMethods, patchState } from "@ngrx/signals"
 
-export type PhaseName = 'INHALE' | 'EXHALE' | 'HOLD' | 'RELAX';
-export type Phase = {
+export type PhaseName = 'INHALE' | 'EXHALE' | 'HOLD';
+export type PhaseConfig = {
   name: PhaseName,
   duration: number,
   delay?: number,
 }
+
 export type BreathConfig = {
-  phases: Phase[],
+  phases: PhaseConfig[]
   sessionDuration: number // in seconds
 }
 
@@ -15,21 +17,26 @@ export const DEFAULT_BREATH_CONFIG: BreathConfig = {
   phases: [
     { name: 'INHALE', duration: 4, delay: .2 },
     { name: 'HOLD', duration: 4, delay: .5 },
-    { name: 'EXHALE', duration: 8, delay: .2 }
+    { name: 'EXHALE', duration: 8, delay: .2 },
   ],
   sessionDuration: 60
 }
 
-@Injectable({
-  providedIn: 'root'
-})
-export class BreathConfigService {
-  readonly config = signal<BreathConfig>(DEFAULT_BREATH_CONFIG);
-  
-  update(newConfig: Partial<BreathConfig>): void {
-    this.config.update(c => ({ ...c, ...newConfig }));
-  }
-  getPhase(name: Exclude<PhaseName, 'RELAX'>): Phase {
-    return this.config().phases.find(e => e.name === name)!;
-  }
-}
+export const BreathConfigStore = signalStore(
+  { providedIn: 'root' },
+  withState(DEFAULT_BREATH_CONFIG),
+  withComputed(({ sessionDuration }) => ({
+    minutes: computed(() => Math.floor(sessionDuration() / 60)),
+    seconds: computed(() => sessionDuration() % 60)
+  })),
+  withMethods((store) => ({
+    updateSessionDuration(newDuration: number): void {
+      if (newDuration < 0 || newDuration > 600) return; // throw new Error(); TODO: handle that
+      patchState(store, { sessionDuration: newDuration })
+    },
+    getPhase(name: PhaseName): PhaseConfig {
+      return store.phases().find(e => e.name === name)!
+    }
+  }))
+
+)

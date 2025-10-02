@@ -1,14 +1,16 @@
 import { Component, ChangeDetectionStrategy, signal, computed, effect, ViewChild, ElementRef, inject, Inject } from '@angular/core';
 import { gsap } from "gsap";
 import { PhaseTrackerService } from './services/phase-tracker.service';
-import { BreathBorderComponent } from './breath-border.component/breath-border.component';
-import { BreathCircleComponent } from './breath-circle.component/breath-circle.component';
+import { BreathBorderComponent } from './breath-border/breath-border.component';
+import { BreathCircleComponent } from './breath-circle/breath-circle.component';
+import { SessionControlComponent } from "./session-control/session-control.component";
+import { SessionService } from './services/session.service';
 
 @Component({
   selector: 'app-breathing',
   templateUrl: './breathing.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [BreathBorderComponent, BreathCircleComponent],
+  imports: [BreathBorderComponent, BreathCircleComponent, SessionControlComponent],
   providers: [{
     provide: 'BreathTimeline',
     useFactory: () => gsap.timeline({ repeat: -1, paused: true })
@@ -21,20 +23,22 @@ export class BreathingComponent {
   // @ViewChild("paragraph") private readonly paragraph!: ElementRef<SVGPathElement>
 
   protected phaseTracker = inject(PhaseTrackerService);
+  protected sessionService = inject(SessionService);
   
   // private readonly animationTimeline: gsap.core.Timeline = gsap.timeline({ repeat: -1, paused: true });
   constructor(@Inject('BreathTimeline') private readonly animationTimeline: gsap.core.Timeline) {}
 
   toggle() {
-    if (this.phaseTracker.isRunning()) { this.stop() }
-    else { this.start() }
+    this.sessionService.isRunning() ? this.stop() : this.start();
   }
   start() {
     this.phaseTracker.start();
+    this.sessionService.start();
     this.animationTimeline.play();
   }
   stop() {
     this.phaseTracker.stop();
+    this.sessionService.reset();
     this.animationTimeline.restart();
     this.animationTimeline.pause();
   }
@@ -45,6 +49,11 @@ export class BreathingComponent {
       .add(this.circleComp.expandAnimationInstant())
       .add(this.borderComp.clearAnimationInstant())
       .add(this.circleComp.exhaleAnimation())
+      .call(() => {
+        if (this.sessionService.isFinished() || !this.sessionService.isRunning()) {
+          this.stop();
+        }
+      })
 
     // this.breathTimeline
     //   .fromTo(this.paragraph.nativeElement, { opacity: 0 }, { opacity: 1, duration: 1 }, "inhaling+=0.5")
