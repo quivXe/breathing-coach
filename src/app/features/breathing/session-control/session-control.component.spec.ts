@@ -9,7 +9,8 @@ import "@testing-library/jest-dom/vitest"
 describe('SessionControlComponent', () => {
   let mockStore: { 
     sessionDuration: ReturnType<typeof signal<number>>; 
-    updateSessionDuration: (val: number) => void 
+    updateSessionDuration: (val: number) => void,
+    getPhase: (name: string) => any
   };
   let mockSession: {
     isRunning: ReturnType<typeof signal<boolean>>;
@@ -19,7 +20,8 @@ describe('SessionControlComponent', () => {
   beforeEach(async () => {
     mockStore = {
       sessionDuration: signal(120), // 2 minutes
-      updateSessionDuration: vi.fn()
+      updateSessionDuration: vi.fn(),
+      getPhase: vi.fn(name => ( {name: name, duration: 4, delay: .2} ))
     };
 
     mockSession = {

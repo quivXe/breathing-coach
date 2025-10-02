@@ -1,11 +1,9 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { BreathConfigStore, PhaseConfig, PhaseName } from './breath-config.service';
-import { SessionService } from './session.service';
 
 @Injectable({ providedIn: 'root' })
 export class PhaseTrackerService {
   private readonly breathConfigStore = inject(BreathConfigStore);
-  private readonly sessionService = inject(SessionService);
   private iterator = this.phaseGenerator();
 
   readonly phase = signal<PhaseConfig | null>(null);

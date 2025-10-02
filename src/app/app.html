@@ -1,4 +1,5 @@
 <div class="flex flex-col items-center justify-center min-h-screen p-6 space-y-6 bg-base-200">
-    <h1 class="join-item text-3xl font-bold">Breathing Coach</h1>
-    <main class="join-item"><router-outlet /></main>    
+    <app-header class="w-80 m-0" (settingsOpened)="settingsModal.showModal()"/>
+    <main class="join-item w-80"><router-outlet /></main>
+    <app-phases-modal #settingsModal />
 </div>

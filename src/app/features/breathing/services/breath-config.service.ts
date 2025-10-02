@@ -34,6 +34,11 @@ export const BreathConfigStore = signalStore(
       if (newDuration < 0 || newDuration > 600) return; // throw new Error(); TODO: handle that
       patchState(store, { sessionDuration: newDuration })
     },
+    updatePhaseDuration(phaseName: PhaseName, duration: PhaseConfig['duration']): void {
+      patchState(store, (state) => ({
+        phases: state.phases.map(phase => phase.name === phaseName ? {...phase, duration} : phase)
+      }))
+    },
     getPhase(name: PhaseName): PhaseConfig {
       return store.phases().find(e => e.name === name)!
     }
